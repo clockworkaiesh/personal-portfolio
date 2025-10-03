@@ -1,0 +1,390 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-montserrat), sans-serif;
+  background: radial-gradient(
+      circle at 20% 30%,
+      #1a2233 0%,
+      #0a0f1c 40%,
+      #0a0f1c 100%
+    ),
+    linear-gradient(
+      135deg,
+      #0a0f1c 0%,
+      #1a2233 25%,
+      #0a0f1c 50%,
+      #2a3245 75%,
+      #0a0f1c 100%
+    );
+  background-attachment: fixed;
+  color: #e4e6eb; /* text-base */
+  position: relative;
+}
+
+.section {
+  @apply text-center px-6;
+}
+/* Transparent section background with parallax feel */
+.section-bg {
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+  backdrop-filter: blur(0.5px);
+}
+
+/* Gradient button class */
+.gradient-button {
+  background: linear-gradient(135deg, #00f0ff 0%, #a855f7 50%, #ff00aa 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+  color: #0a0f1c;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.6);
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.7);
+  animation-duration: 1s;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 0px; /* Hide vertical scrollbar */
+  height: 0px; /* Hide horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-light;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-softer rounded-[6px];
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-muted;
+}
+
+/* Fade up animation */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.section-heading {
+  @apply text-6xl font-bold leading-[150%] text-text-heading;
+  &.large{
+    @apply text-[75px];
+  }
+}
+.section-content {
+  @apply text-[2xl] max-w-[70dvw] mx-auto text-[18px] opacity-[0.8] leading-[150%];
+  &.full {
+    @apply max-w-full;
+  }
+  &.compact {
+    @apply max-w-[60dvw];
+  }
+}
+
+/* Custom cursor styles - Brittany Chiang style */
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  transition-duration: 0.3s;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter, webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cursor-glow.hidden {
+  opacity: 0;
+}
+
+/* Hide default cursor */
+/* * {
+  cursor: none !important;
+} */
+
+/* Show default cursor for text inputs and textareas */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  cursor: text !important;
+}
+
+.circle {
+  @apply cursor-none absolute top-[200px] left-[200px] w-0 h-0 rounded-[50%];
+  background: linear-gradient(
+    135deg,
+    rgb(168, 85, 247) 0%,
+    rgb(139, 92, 246) 100%
+  );
+  box-shadow: 0 0 50px rgba(168, 85, 247, 1), 0 0 100px rgba(139, 92, 246, 1);
+}
+
+/* Ensure div with section-content behaves like paragraph */
+div.section-content {
+  display: block;
+  margin: 0;
+}
+
+/* Vertical scrolling layout */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Ensure sections take full viewport height */
+.section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Smooth scroll container */
+.scroll-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+/* Enhanced scroll snapping */
+.scroll-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* Smooth scroll behavior for better snapping */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Prevent scroll chaining */
+.scroll-container {
+  overscroll-behavior: contain;
+}
+
+/* Enhanced scroll snapping with better timing */
+@supports (scroll-snap-type: y mandatory) {
+  .scroll-container {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 0;
+  }
+
+  .scroll-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Parallax performance optimizations */
+.parallax-element {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Smooth parallax transitions */
+.parallax-smooth {
+  transition: transform 0.1s ease-out;
+}
+
+/* Enhanced about section parallax background */
+.about-parallax-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Staggered content animation */
+.content-wrapper {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Enhanced parallax layers */
+.parallax-layer-1 {
+  z-index: 1;
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-layer-2 {
+  z-index: 2;
+  transition: transform 0.15s ease-out;
+}
+
+.parallax-layer-3 {
+  z-index: 3;
+  transition: transform 0.2s ease-out;
+}
+
+/* Section entrance/exit animations */
+.section-entering {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.section-exiting {
+  animation: fadeOutDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+/* Shape entrance animations */
+.shape-entering {
+  animation: shapeFadeIn 0.5s ease-out forwards;
+}
+
+.shape-exiting {
+  animation: shapeFadeOut 0.3s ease-out forwards;
+}
+
+@keyframes shapeFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shapeFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+/* Skills staggered animation */
+.skill-item {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Smooth skills animation without blinking */
+.skills-grid {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.source-code-img {
+  &::before {
+    content: "";
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("/code-snap-shot.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    bottom: -40%;
+    right: -30%;
+  }
+}
+
+/* From Uiverse.io by Navarog21 */
+/* From Uiverse.io by suda-code */ 
+button {
+  @apply px-[30px] py-[10px] border-0 rounded-[100px] bg-logoBlue text-text-heading font-bold transition-all ease-linear duration-[0.5s];
+  &:hover{
+    @apply bg-logoBlue/80 scale-[1.05];
+    box-shadow: 0 0 20px #6fc5ff50;
+  };
+  &:active{
+    @apply bg-logoBlue scale-[0.98] transition-all ease-linear duration-[0.25s];
+    box-shadow: none;
+  };
+}

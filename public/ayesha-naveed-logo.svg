@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Merged AN Letters -->
+  <g fill="none" stroke="url(#grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left leg of A -->
+    <path d="M30 90 L60 30" />
+    <!-- Right leg of A + Left leg of N -->
+    <path d="M90 90 L60 30 L60 90" />
+    <!-- Diagonal of N -->
+    <path d="M60 50 L90 90" />
+    <!-- Circuit-inspired crossbar -->
+    <path d="M40 60 L80 60" stroke-dasharray="2 4" opacity="0.7"/>
+  </g>
+  
+  <!-- Optional: Dot accent -->
+  <circle cx="95" cy="35" r="4" fill="#06B6D4" />
+</svg>
