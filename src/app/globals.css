@@ -28,7 +28,7 @@ body {
 }
 
 .section {
-  @apply text-center px-6;
+  @apply text-center;
 }
 /* Transparent section background with parallax feel */
 .section-bg {

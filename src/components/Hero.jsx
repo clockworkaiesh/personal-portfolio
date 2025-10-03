@@ -40,8 +40,9 @@ export default function Hero() {
       />
       </div>
 
-        <div className="w-[1020px] h-full ">
-          <img src="/dev-setup.png" alt="" />
+        <div className="w-[1020px] h-full relative">
+          <img src="/shapes/hero-blob.gif" className="absolute inset-0 z-0 opacity-[0.2]"/>
+          <img src="/dev-setup.png" alt="" className="relative z-10"/>
         </div>
       </div>
     </div>

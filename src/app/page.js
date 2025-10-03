@@ -241,10 +241,8 @@ export default function Home() {
           </div>
         </section>
         
-        <section className="scroll-section section w-full flex items-center justify-center section-bg text-text-heading">
-          <div className="relative z-10">
+        <section className="scroll-section section w-full  flex items-center justify-center section-bg text-text-heading">
             <Contact />
-          </div>
         </section>
       </main>
       
