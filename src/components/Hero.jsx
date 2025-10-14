@@ -2,8 +2,8 @@ import SplitText from "./SplitText";
 
 export default function Hero() {
   return (
-    <div className=" h-screen w-screen flex flex-col justify-center items-center px-6">
-      <div className="flex justify-between items-center max-w-[60dvw] mx-auto">
+    <div className=" h-screen w-screen flex lg:flex-col justify-center items-center px-6">
+      <div className="flex flex-col lg:flex-row justify-between items-center max-w-[90dvw] lg:max-w-[60dvw] mx-auto">
         <div className="text-left">
         <SplitText
         text="Hey, I'm Ayesha"
@@ -40,7 +40,7 @@ export default function Hero() {
       />
       </div>
 
-        <div className="w-[1020px] h-full relative">
+        <div className="max-w-full w-[1020px] relative">
           <img src="/shapes/hero-blob.gif" className="absolute inset-0 z-0 opacity-[0.2]"/>
           <img src="/dev-setup.png" alt="" className="relative z-10"/>
         </div>

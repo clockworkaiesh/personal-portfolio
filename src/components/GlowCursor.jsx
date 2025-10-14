@@ -1,19 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 function GlowCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
 
+  // Throttle mouse movement for better performance
+  const throttledMouseMove = useCallback((e) => {
+    setMousePosition({
+      x: e.clientX,
+      y: e.clientY
+    });
+    
+    if (!isVisible) {
+      setIsVisible(true);
+    }
+  }, [isVisible]);
+
   useEffect(() => {
+    let throttleTimeout;
+    
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: e.clientX,
-        y: e.clientY
-      });
-      
-      if (!isVisible) {
-        setIsVisible(true);
-      }
+      if (throttleTimeout) return;
+      throttleTimeout = setTimeout(() => {
+        throttledMouseMove(e);
+        throttleTimeout = null;
+      }, 16); // ~60fps
     };
 
     const handleMouseEnter = () => {
@@ -24,7 +35,7 @@ function GlowCursor() {
       setIsVisible(false);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseenter", handleMouseEnter);
     document.addEventListener("mouseleave", handleMouseLeave);
 
@@ -32,8 +43,11 @@ function GlowCursor() {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
     };
-  }, [isVisible]);
+  }, [throttledMouseMove]);
 
   return (
     <div 

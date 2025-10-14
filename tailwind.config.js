@@ -48,6 +48,9 @@ module.exports = {
           'to': { transform: 'translateX(-50%)' }
         }
       },
+      fontFamily: {
+        'host-grotesk': ["'Host Grotesk', sans-serif"],
+      },
 
       animation: {
         marquee: 'marquee 15s linear infinite'

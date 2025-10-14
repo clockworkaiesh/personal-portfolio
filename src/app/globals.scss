@@ -1,0 +1,347 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply m-0 p-0 h-full relative text-[#e4e6eb] font-host-grotesk;
+}
+
+/* Vertical scrolling layout */
+html {
+  @apply scroll-smooth;
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  @apply overflow-x-hidden overflow-y-auto;
+    background: url('/grid-pattern.svg') center center / contain repeat, radial-gradient(circle at 20% 30%,
+      #1a2233 0%,
+      #0a0f1c 40%,
+      #0a0f1c 100%),
+    linear-gradient(135deg,
+      #0a0f1c 0%,
+      #1a2233 25%,
+      #0a0f1c 50%,
+      #2a3245 75%,
+      #0a0f1c 100%);
+      background-attachment: scroll; 
+}
+
+.section {
+  @apply text-center;
+}
+
+/* Transparent section background with parallax feel */
+.section-bg {
+  @apply bg-transparent relative overflow-hidden;
+  &::before {
+    content: "";
+    @apply absolute inset-0 bg-transparent pointer-events-none backdrop-blur-[0.5px];
+  }
+}
+
+.gradient-button {
+  @apply text-[#0a0f1c] font-semibold py-3 px-6 rounded-lg no-underline inline-block transition-all duration-300 ease-in-out border-none cursor-pointer;
+
+  background: linear-gradient(135deg, #00f0ff 0%, #a855f7 50%, #ff00aa 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+  box-shadow: 0 4px 15px rgba(0, 240, 255, 0.6);
+
+  &:hover {
+    @apply -translate-y-[2px];
+    animation-duration: 1s;
+    box-shadow: 0 6px 20px rgba(0, 240, 255, 0.7);
+  }
+}
+
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 0px;
+  /* Hide vertical scrollbar */
+  height: 0px;
+  /* Hide horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-light;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-softer rounded-[6px];
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-muted;
+}
+
+
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.section-heading {
+  @apply text-[38px] lg:text-[40px] xl:text-[50px] 2xl:text-6xl leading-[150%] text-text-heading font-bold;
+
+  &.large {
+    @apply text-[42px] lg:text-[50px] xl:text-[60px] 2xl:text-[75px] leading-[150%] font-bold;
+  }
+}
+
+.section-content {
+  @apply max-w-[95dvw] lg:max-w-[50dvw] mx-auto text-[15px] lg:text-[16px] xl:text-[18px] 2xl:text-[20px] opacity-[0.8] leading-[150%] font-light;
+
+  &.full {
+    @apply max-w-full;
+  }
+
+  &.compact {
+    @apply max-w-[90dvw] lg:max-w-[60dvw];
+  }
+}
+
+/* Optimized cursor styles for better performance */
+.cursor-glow {
+  @apply fixed inset-0 pointer-events-none z-30 transition-opacity duration-200 ease-in-out;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+
+.cursor-glow.hidden {
+  opacity: 0;
+}
+
+/* Show default cursor for text inputs and textareas */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  cursor: text !important;
+}
+
+.circle {
+  @apply cursor-none absolute top-[200px] left-[200px] w-0 h-0 rounded-[50%];
+  background: linear-gradient(135deg,
+      rgb(168, 85, 247) 0%,
+      rgb(139, 92, 246) 100%);
+  box-shadow: 0 0 50px rgba(168, 85, 247, 1), 0 0 100px rgba(139, 92, 246, 1);
+}
+
+
+.section {
+  @apply min-h-screen;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.scroll-container {
+  @apply h-screen overflow-y-scroll scroll-smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.scroll-section {
+  @apply min-h-screen;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Smooth scroll behavior for better snapping */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Prevent scroll chaining */
+.scroll-container {
+  overscroll-behavior: contain;
+}
+
+/* Enhanced scroll snapping with better timing */
+@supports (scroll-snap-type: y mandatory) {
+  .scroll-container {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 0;
+  }
+
+  .scroll-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Enhanced about section parallax background */
+.about-parallax-bg {
+  @apply absolute top-0 left-0 right-0 bottom-0 pointer-events-none -z-[1];
+}
+
+/* Staggered content animation */
+.content-wrapper {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Section entrance/exit animations */
+.section-entering {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.section-exiting {
+  animation: fadeOutDown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Shape entrance animations */
+.shape-entering {
+  animation: shapeFadeIn 0.5s ease-out forwards;
+}
+
+.shape-exiting {
+  animation: shapeFadeOut 0.3s ease-out forwards;
+}
+
+/* Skills staggered animation */
+.skill-item {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Smooth skills animation without blinking */
+.skills-grid {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.source-code-img {
+  &::before {
+    content: "";
+    pointer-events: none;
+    background-image: url("/code-snap-shot.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    @apply absolute bottom-[-40%] right-[-30%] w-1/2 h-full opacity-50 -z-[1];
+  }
+}
+
+
+button {
+  @apply px-[30px] py-[10px] border-0 rounded-[100px] bg-logoBlue text-text-heading font-bold transition-all ease-linear duration-[0.5s];
+  &:hover {
+    @apply bg-logoBlue/80 scale-[1.05];
+    box-shadow: 0 0 20px #6fc5ff50;
+  }
+  &:active {
+    @apply bg-logoBlue scale-[0.98] transition-all ease-linear duration-[0.25s];
+    box-shadow: none;
+  }
+}
+
+
+// .sticky-contact {
+//   @apply sticky bottom-0 z-[1];
+//   /* keeps it under next sections if needed */
+// }
+
+.contact-section {
+  /* Multiple background images */
+  background-image:
+    url("/shapes/blob-2.svg"),
+    url("/shapes/blob-1.svg"),
+    url("/shapes/disc.svg"),
+    url("/shapes/cube.svg"),
+    url("/shapes/cube.svg"),
+    url("/shapes/cube.svg"),
+    url("/shapes/cube.svg"),
+    url("/shapes/disc.svg");
+
+  /* Fixed attachment for all layers */
+  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed,  fixed;
+  /* Position of each background image (match your old absolute positions) */
+  background-position:
+    0 100%, right -1rem bottom 51rem, right 41.5rem top 3rem, left 2.5rem bottom 0rem, right -0.5rem bottom -2rem, 22% 75%, 88% 38%, 53% 94%;
+  /* Size for each image */
+  background-size:
+320px, 350px, 60px, 39px, 80px, 50px, 65px, 90px;
+  /* No repeating */
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+}
+
+/* keyframes */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+@keyframes shapeFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes shapeFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.project-title {
+  @apply text-[22px] font-bold mb-3 text-text-heading;
+}
+.project-detail {
+  @apply text-[12px] text-base opacity-80 leading-relaxed; 
+}

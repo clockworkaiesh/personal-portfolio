@@ -1,156 +1,129 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import SplitText from "./SplitText";
 import HighlightedSplitText from "./HighlightedSplitText";
-import PixelBlast from "./PixelBlast";
+
+gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
 export default function About() {
-  const containerRef = useRef(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [contentScrollY, setContentScrollY] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isEntering, setIsEntering] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
+  const sectionRef = useRef(null);
+  const svgPathRef = useRef(null);
+  const contentWrapperRef = useRef(null);
 
   useEffect(() => {
-    let contentTimeout;
-    let animationTimeout;
-    
-    const handleScroll = () => {
-      const container = containerRef.current;
-      if (!container) return;
+    const ctx = gsap.context(() => {
+      const section = sectionRef.current;
+      const svgPath = svgPathRef.current;
+      const contentWrapper = contentWrapperRef.current;
 
-      // Get the scroll position relative to this section
-      const rect = container.getBoundingClientRect();
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate scroll progress within this section (0 to 1)
-      const scrollProgress = Math.max(0, Math.min(1, -sectionTop / sectionHeight));
-      
-      // Determine section visibility and state
-      const isInView = sectionTop < viewportHeight && sectionTop > -sectionHeight;
-      const isFullyInView = sectionTop <= 0 && sectionTop > -sectionHeight;
-      const isScrollingDown = scrollProgress > 0.1;
-      const isScrollingUp = scrollProgress < 0.9;
-      
-      // Handle entrance animation (shapes first, then content)
-      if (isInView && !isVisible) {
-        setIsVisible(true);
-        setIsEntering(true);
-        setIsExiting(false);
-        
-        // Shapes appear immediately
-        setScrollY(scrollProgress);
-        
-        // Content fades in after 0.4s delay
-        animationTimeout = setTimeout(() => {
-          setContentScrollY(scrollProgress);
-          setIsEntering(false);
-        }, 400);
+      if (!section || !svgPath || !contentWrapper) {
+        console.error("About section refs not found.");
+        return;
       }
-      
-      // Handle exit animation (content first, then shapes)
-      else if (!isInView && isVisible) {
-        setIsVisible(false);
-        setIsExiting(true);
-        setIsEntering(false);
-        
-        // Content fades out immediately
-        setContentScrollY(0);
-        
-        // Shapes fade out after 0.3s delay
-        animationTimeout = setTimeout(() => {
-          setScrollY(0);
-          setIsExiting(false);
-        }, 300);
-      }
-      
-      // Handle normal scrolling within section
-      else if (isVisible && isFullyInView) {
-        // Background elements move immediately
-        setScrollY(scrollProgress);
-        
-        // Clear any existing timeout
-        if (contentTimeout) {
-          clearTimeout(contentTimeout);
-        }
-        
-        // Content follows with 0.3s delay
-        contentTimeout = setTimeout(() => {
-          setContentScrollY(scrollProgress);
-        }, 300);
-      }
-    };
 
-    // Listen to scroll events on the main container
-    const scrollContainer = document.querySelector('.scroll-container');
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
-      // Initial call to set correct position
-      handleScroll();
-      
-      return () => {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-        if (contentTimeout) {
-          clearTimeout(contentTimeout);
-        }
-        if (animationTimeout) {
-          clearTimeout(animationTimeout);
-        }
-      };
-    }
-  }, [isVisible]);
+      // Set initial states
+      gsap.set(svgPath, { drawSVG: "0%" });
+      gsap.set(contentWrapper, { autoAlpha: 0 });
+      // Initially hide the marker
+      gsap.set(svgPath, { attr: { "markerEnd": "none" } });
 
-  const getContentTransform = (speed, offset = 0) => {
-    const translateY = (contentScrollY - 0.5) * speed + offset;
-    return `translateY(${translateY}px)`;
-  };
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          scroller: ".scroll-container",
+          start: "top center",
+          end: "bottom bottom",
+          scrub: 1,
+          toggleActions: "play reverse play reverse",
+        },
+      });
+
+      // 1. Animate the SVG path drawing
+      tl.to(svgPath, {
+        drawSVG: "100%",
+        duration: 2,
+        ease: "none",
+        // When the path is fully drawn, add the marker back
+        onComplete: () =>
+          gsap.set(svgPath, { attr: { "markerEnd": "url(#SvgjsMarker3293)" } }),
+        // When reversing, hide the marker immediately
+        onReverseComplete: () =>
+          gsap.set(svgPath, { attr: { "markerEnd": "none" } }),
+      }).to(
+        // 2. Animate the content to appear
+        contentWrapper,
+        {
+          autoAlpha: 1,
+          duration: 1,
+          ease: "power2.inOut",
+        },
+        "-=1"
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="text-center w-screen h-screen  relative flex flex-col justify-center items-center px-6 overflow-hidden"
+    <div
+      ref={sectionRef}
+      className="text-center w-screen h-screen relative flex flex-col justify-center items-center px-6 overflow-hidden"
     >
-      <div className="w-full h-full absolute inset-0 opacity-20">
-        <PixelBlast
-          variant="circle"
-          pixelSize={6}
-          color="#B19EEF"
-          patternScale={3}
-          patternDensity={1.2}
-          pixelSizeJitter={0.5}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.6}
-          edgeFade={0.25}
-          transparent
-        />
-      </div>
       {/* Parallax background gradient */}
-      <div 
-        className="about-parallax-bg transition-opacity duration-500 ease-out"
-        style={{
-          transform: `translateY(${(scrollY - 0.5) * 30}px)`,
-          opacity: isVisible ? 1 : 0,
-          willChange: 'transform, opacity'
-        }}
-      />
-      
-      <div 
+      <div className="animated-bg" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+        viewBox="0 0 640 800"
+        className="absolute right-[7%] top-[5%] h-[500px]"
+      >
+        <defs>
+          {/* Define the gradient */}
+          <linearGradient id="aboutGradient">
+            <stop stopColor="#00FF9D" offset="0%" />
+            <stop stopColor="#00F0FF" offset="100%" />
+          </linearGradient>
+          <marker
+            markerWidth="8"
+            markerHeight="8"
+            refX="4"
+            refY="4"
+            viewBox="0 0 8 8"
+            orient="auto"
+            id="SvgjsMarker3293"
+          >
+            <polyline
+              points="0,4 4,2 0,0"
+              fill="none"
+              strokeWidth="1.3333333333333333"
+              stroke="url(#aboutGradient)" // Apply gradient to marker
+              strokeLinecap="round"
+              transform="matrix(1,0,0,1,1.3333333333333333,2)"
+              strokeLinejoin="round"
+            ></polyline>
+          </marker>
+        </defs>
+        <g
+          strokeWidth="6"
+          stroke="url(#aboutGradient)" // Apply gradient to the path
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          transform="matrix(0.12186934340514749,0.992546151641322,-0.992546151641322,0.12186934340514749,638.0202707668816,15.637494112717945)"
+        >
+          <path
+            ref={svgPathRef}
+            d="M32.5 112.5Q809.5 519.5 320 400Q583.5 141.5 607.5 687.5 "
+            markerEnd="url(#SvgjsMarker3293)"
+          ></path>
+        </g>
+      </svg>
+      <div
+        ref={contentWrapperRef}
         className="content-wrapper w-[60dvw] mx-auto] transition-all duration-500 ease-out"
-        style={{
-          transform: `${getContentTransform(20)} ${isEntering ? 'translateY(30px)' : isExiting ? 'translateY(-30px)' : 'translateY(0px)'}`,
-          opacity: isVisible && !isEntering ? 1 : 0,
-          willChange: 'transform, opacity'
-        }}
       >
         <SplitText
           text="Who am I?"
@@ -163,7 +136,25 @@ export default function About() {
           rootMargin="0px"
         />
         <HighlightedSplitText
-          text="I'm a Frontend Developer with 6+ years of experience turning ideas into digital products that are both functional and visually engaging. From sleek landing pages to complex dashboards, I focus on building interfaces that are responsive, intuitive, and performance-driven. My toolkit includes React.js, Next.js, Redux Toolkit, and Tailwind, along with Framer Motion for animations, D3.js for data visualizations, and Web3 integrations that bring interactivity and modern functionality to the web."
+          text="I'm a Frontend Developer with 6+ years of experience turning ideas into digital products that are both functional and visually engaging. From sleek landing pages to complex dashboards, I focus on building interfaces that are responsive, intuitive, and performance-driven."
+          tag="p"
+          className="section-content mb-2"
+          stagger={0.02}
+          duration={0.6}
+          splitType="words"
+          threshold={0.3}
+          rootMargin="0px"
+          highlights={[
+            { word: "Frontend Developer", color: "neon-blue" },
+            { word: "6+ years", color: "neon-blue" },
+            { word: "responsive", color: "neon-blue" },
+            { word: "intuitive", color: "neon-blue" },
+            { word: "performance-driven", color: "neon-blue" },
+          ]}
+        />
+
+        <HighlightedSplitText
+          text="My toolkit includes React.js, Next.js, Redux Toolkit, and Tailwind, along with Framer Motion for animations, D3.js for data visualizations, and Web3 integrations that bring interactivity and modern functionality to the web."
           tag="p"
           className="section-content"
           stagger={0.02}
@@ -172,22 +163,16 @@ export default function About() {
           threshold={0.3}
           rootMargin="0px"
           highlights={[
-            { word: 'Frontend Developer', color: 'neon-blue' },
-            { word: '6+ years', color: 'neon-blue' },
-            { word: 'React.js', color: 'neon-blue' },
-            { word: 'Next.js', color: 'neon-blue' },
-            { word: 'Redux Toolkit', color: 'neon-blue' },
-            { word: 'Tailwind', color: 'neon-blue' },
-            { word: 'Framer Motion', color: 'neon-blue' },
-            { word: 'D3.js', color: 'neon-blue' },
-            { word: 'Web3', color: 'neon-blue' },
-            { word: 'responsive', color: 'neon-blue' },
-            { word: 'intuitive', color: 'neon-blue' },
-            { word: 'performance-driven', color: 'neon-blue' }
+            { word: "React.js", color: "neon-blue" },
+            { word: "Next.js", color: "neon-blue" },
+            { word: "Redux Toolkit", color: "neon-blue" },
+            { word: "Tailwind", color: "neon-blue" },
+            { word: "Framer Motion", color: "neon-blue" },
+            { word: "D3.js", color: "neon-blue" },
+            { word: "Web3", color: "neon-blue" },
           ]}
         />
       </div>
-      
     </div>
   );
 }

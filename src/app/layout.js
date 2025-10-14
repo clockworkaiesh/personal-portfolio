@@ -1,20 +1,23 @@
-import { Montserrat } from "next/font/google";
-import "./globals.css";
+import { Host_Grotesk } from "next/font/google";
+import "./globals.scss";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const hostGrotesk = Host_Grotesk({
+  variable: "--font-host-grotesk",
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata = {
   title: "Ayesha Naveed - Portfolio",
-  description: "Personal portfolio website showcasing web development projects, skills, and experience in React, Next.js, and modern web technologies.",
-  keywords: "portfolio, web developer, react, nextjs, javascript, frontend developer",
+  description:
+    "Personal portfolio website showcasing web development projects, skills, and experience in React, Next.js, and modern web technologies.",
+  keywords:
+    "portfolio, web developer, react, nextjs, javascript, frontend developer",
   authors: [{ name: "Ayesha Naveed" }],
   openGraph: {
     title: "Ayesha Naveed - Portfolio",
-    description: "Personal portfolio website showcasing web development projects and skills",
+    description:
+      "Personal portfolio website showcasing web development projects and skills",
     type: "website",
   },
 };
@@ -22,9 +25,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.variable} antialiased`}
-      >
+      <body className={`${hostGrotesk.variable} antialiased`}>
         {children}
       </body>
     </html>

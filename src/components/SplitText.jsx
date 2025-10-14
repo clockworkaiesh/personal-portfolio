@@ -32,18 +32,27 @@ const SplitText = ({
       return text;
     }
 
+    // Optimize animations for better performance
+    const animationProps = {
+      initial: { opacity: 0, y: 10 },
+      animate: isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 },
+      transition: {
+        duration: duration * 0.8, // Slightly faster animations
+        ease: "easeOut"
+      },
+      style: { willChange: 'transform, opacity' }
+    };
+
     if (type === 'chars') {
       return text.split('').map((char, index) => (
         <motion.span
           key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          {...animationProps}
           transition={{
-            duration,
-            delay: index * stagger,
-            ease: "easeOut"
+            ...animationProps.transition,
+            delay: index * stagger * 0.5 // Reduced stagger for faster animation
           }}
-          style={{ display: 'inline-block' }}
+          style={{ ...animationProps.style, display: 'inline-block' }}
         >
           {char === ' ' ? '\u00A0' : char}
         </motion.span>
@@ -52,14 +61,12 @@ const SplitText = ({
       return text.split(' ').map((word, index) => (
         <motion.span
           key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          {...animationProps}
           transition={{
-            duration,
-            delay: index * stagger,
-            ease: "easeOut"
+            ...animationProps.transition,
+            delay: index * stagger * 0.3 // Reduced stagger for faster animation
           }}
-          style={{ display: 'inline-block', marginRight: '0.25em' }}
+          style={{ ...animationProps.style, display: 'inline-block', marginRight: '0.25em' }}
         >
           {word}
         </motion.span>
@@ -69,14 +76,12 @@ const SplitText = ({
       return text.split('\n').map((line, index) => (
         <motion.span
           key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          {...animationProps}
           transition={{
-            duration,
-            delay: index * stagger,
-            ease: "easeOut"
+            ...animationProps.transition,
+            delay: index * stagger * 0.2 // Reduced stagger for faster animation
           }}
-          style={{ display: 'block' }}
+          style={{ ...animationProps.style, display: 'block' }}
         >
           {line}
         </motion.span>
